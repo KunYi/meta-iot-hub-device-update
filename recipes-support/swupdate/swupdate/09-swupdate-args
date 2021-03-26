@@ -1,0 +1,16 @@
+
+# SWUpdate doesn't support everything necessary for the dual-copy or A/B update strategy.
+# Here we figure out the current OS partition and then set some environment variables
+# that we use to tell swupdate which partition to target.
+rootfs_dev=$(mount | grep "on / type" | cut -d':' -f 2 | cut -d' ' -f 1)
+if [[ $rootfs_dev == '/dev/mmcblk0p2' ]]; then
+    selection="stable,copy2"
+#    current_part=2
+#    update_part=3
+else
+    selection="stable,copy1"
+#    current_part=3
+#    update_part=2
+fi
+
+SWUPDATE_ARGS="${SWUPDATE_ARGS} -e ${selection}"

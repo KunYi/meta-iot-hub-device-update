@@ -1,0 +1,89 @@
+From 839a259c8fceb5830939bf0abaa2ca651979d96b Mon Sep 17 00:00:00 2001
+From: KunYi <kunyi.chen@gmail.com>
+Date: Sun, 14 Mar 2021 16:41:08 +0800
+Subject: [PATCH] fix build error of agent for dunfell
+
+%% original patch: 0001-fix-build-error-of-agent-for-dunfell.patch
+---
+ src/agent/CMakeLists.txt                                | 9 +++++++--
+ src/agent/adu_core_interface/CMakeLists.txt             | 2 ++
+ src/agent/device_info_interface/CMakeLists.txt          | 2 ++
+ src/platform_layers/linux_platform_layer/CMakeLists.txt | 2 ++
+ src/utils/CMakeLists.txt                                | 1 +
+ 5 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/src/agent/CMakeLists.txt b/src/agent/CMakeLists.txt
+index b199ee1..7e2b60a 100644
+--- a/src/agent/CMakeLists.txt
++++ b/src/agent/CMakeLists.txt
+@@ -59,6 +59,7 @@ find_package (IotHubClient REQUIRED)
+ find_package (umqtt REQUIRED)
+ find_package (Parson REQUIRED)
+ 
++
+ target_link_digital_twin_client (${target_name} PRIVATE)
+ 
+ target_link_libraries (
+@@ -74,7 +75,8 @@ target_link_libraries (
+             aduc::device_info_interface
+             aduc::logging
+             aduc::eis_utils
+-            aduc::system_utils)
++            aduc::system_utils
++            )
+ 
+ get_filename_component (
+     ADUC_INSTALLEDCRITERIA_FILE_PATH
+@@ -99,6 +101,9 @@ if (ADUC_PROVISION_WITH_EIS)
+     target_compile_definitions (${target_name} PRIVATE ADUC_PROVISION_WITH_EIS)
+ endif ()
+ 
+-target_link_libraries (${target_name} PRIVATE aduc::platform_layer)
++target_link_libraries (${target_name} PRIVATE aduc::platform_layer ${Boost_LIBRARIES})
++
++find_package (Boost REQUIRED COMPONENTS random thread chrono atomic regex date_time log)
+ 
+ install (TARGETS ${target_name} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++
+diff --git a/src/agent/adu_core_interface/CMakeLists.txt b/src/agent/adu_core_interface/CMakeLists.txt
+index 43923cf..7e7b7f0 100644
+--- a/src/agent/adu_core_interface/CMakeLists.txt
++++ b/src/agent/adu_core_interface/CMakeLists.txt
+@@ -56,3 +56,5 @@ endif ()
+ if (ENABLE_ADU_TELEMETRY_REPORTING)
+     target_compile_definitions (${PROJECT_NAME} PRIVATE ENABLE_ADU_TELEMETRY_REPORTING)
+ endif ()
++
++find_package (Boost REQUIRED COMPONENTS random thread chrono atomic regex date_time log)
+diff --git a/src/agent/device_info_interface/CMakeLists.txt b/src/agent/device_info_interface/CMakeLists.txt
+index d674963..de11e59 100644
+--- a/src/agent/device_info_interface/CMakeLists.txt
++++ b/src/agent/device_info_interface/CMakeLists.txt
+@@ -19,3 +19,5 @@ target_link_libraries (
+     PUBLIC aduc::c_utils
+            aduc::communication_abstraction
+     PRIVATE aduc::logging aduc::pnp_helper IotHubClient::iothub_client)
++
++find_package (Boost REQUIRED COMPONENTS random thread chrono atomic regex date_time log)
+diff --git a/src/platform_layers/linux_platform_layer/CMakeLists.txt b/src/platform_layers/linux_platform_layer/CMakeLists.txt
+index 3de4a26..b7fbb78 100644
+--- a/src/platform_layers/linux_platform_layer/CMakeLists.txt
++++ b/src/platform_layers/linux_platform_layer/CMakeLists.txt
+@@ -55,3 +55,5 @@ target_compile_definitions (
+ if (ADUC_BUILD_UNIT_TESTS)
+     add_subdirectory (tests)
+ endif ()
++
++find_package (Boost REQUIRED COMPONENTS random thread chrono atomic regex date_time log)
+diff --git a/src/utils/CMakeLists.txt b/src/utils/CMakeLists.txt
+index f57005c..58b917c 100644
+--- a/src/utils/CMakeLists.txt
++++ b/src/utils/CMakeLists.txt
+@@ -9,3 +9,4 @@ add_subdirectory (jws_utils)
+ add_subdirectory (process_utils)
+ add_subdirectory (string_utils)
+ add_subdirectory (system_utils)
++find_package (Boost REQUIRED COMPONENTS random thread chrono atomic regex date_time log)
+-- 
+2.31.1
+

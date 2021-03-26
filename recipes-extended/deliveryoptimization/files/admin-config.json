@@ -1,0 +1,6 @@
+{
+	"DODelayCacheServerFallbackBackground":  5,
+	"DODelayCacheServerFallbackForeground": 10,
+	"DOCacheHost": "test.do-client.com",
+	"RestControllerValidateRemoteAddr": "rest.do-client.com"
+}

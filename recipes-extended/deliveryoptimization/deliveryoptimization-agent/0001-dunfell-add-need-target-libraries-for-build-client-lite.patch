@@ -1,0 +1,42 @@
+From c342218b614973c027b74b925dbf8c931a457fea Mon Sep 17 00:00:00 2001
+From: KunYi <kunyi.chen@gmail.com>
+Date: Sun, 14 Mar 2021 16:19:55 +0800
+Subject: [PATCH] [dunfell] add need target libraries for build client-lite
+
+---
+ client-lite/CMakeLists.txt | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/client-lite/CMakeLists.txt b/client-lite/CMakeLists.txt
+index dc53741..6bd172b 100644
+--- a/client-lite/CMakeLists.txt
++++ b/client-lite/CMakeLists.txt
+@@ -32,7 +32,7 @@ function (target_link_dl_lib target)
+ endfunction ()
+ 
+ # Include external libraries here:
+-find_package(Boost COMPONENTS log filesystem REQUIRED)
++find_package(Boost REQUIRED COMPONENTS log filesystem)
+ 
+ # Cpprest Issues:
+ # 1. v2.10.10 min version (see required PR link below). cpprestsdk does not seem to support specifying this through cmake.
+@@ -114,6 +114,9 @@ target_link_libraries(${DOSVC_BIN_NAME}
+     doversion
+     docs_common
+     cpprestsdk::cpprest
++    OpenSSL::SSL
++    Boost::log
++    Boost::filesystem
+     ${Boost_LIBRARIES})
+ 
+ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+@@ -161,4 +164,4 @@ endif() # Linux
+ 
+ if(DO_BUILD_TESTS)
+     add_subdirectory (test)
+-endif()
+\ No newline at end of file
++endif()
+-- 
+2.30.2
+

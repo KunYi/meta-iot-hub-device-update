@@ -1,0 +1,39 @@
+From ae68ea15b911b50e6249ba0cb3892eb7dab5862b Mon Sep 17 00:00:00 2001
+From: KunYi <kunyi.chen@gmail.com>
+Date: Wed, 24 Mar 2021 15:50:02 +0800
+Subject: [PATCH] fixed build error when with yocto(dunfell)
+
+to add need target libraries for boost
+---
+ plugins/linux-apt/CMakeLists.txt | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/plugins/linux-apt/CMakeLists.txt b/plugins/linux-apt/CMakeLists.txt
+index 37770c5..63f18f6 100644
+--- a/plugins/linux-apt/CMakeLists.txt
++++ b/plugins/linux-apt/CMakeLists.txt
+@@ -7,7 +7,7 @@ project (${DO_PLUGIN_APT_BIN_NAME} VERSION 0.2.0)
+ find_package(deliveryoptimization_sdk CONFIG REQUIRED)
+ find_package(OpenSSL REQUIRED)
+ find_package(UUID REQUIRED)
+-
++find_package(Boost REQUIRED COMPONENTS atomic chrono date_time random regex thread)
+ file(GLOB dopapt_source
+     "*.cpp"
+ )
+@@ -27,6 +27,12 @@ target_link_libraries(${DO_PLUGIN_APT_BIN_NAME} PRIVATE
+     Microsoft::deliveryoptimization
+     OpenSSL::Crypto
+     UUID::UUID
++    Boost::atomic
++    Boost::chrono
++    Boost::date_time
++    Boost::random
++    Boost::regex
++    Boost::thread
+ )
+ 
+ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+-- 
+2.31.0
+
